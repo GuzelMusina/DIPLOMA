@@ -1,18 +1,23 @@
-# подгрузим модули
-import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-import math
 
 from python.ChangerStudents import ChangerStudents
+from python.ChangerMarks import ChangerMarks
+from python.helpers.Union import Union
+from python.helpers.Saver import Saver
 
-# загрузим данные
+# upload data
 def readCSVStudents():
     # dataset_marks = pd.read_csv('../data/Marks.csv')
     dataset_students = pd.read_csv('../data/Students.csv')
     return dataset_students
     # print(dataset_students.head())
 
+# upload data
+def readCSVMarks():
+    dataset_marks = pd.read_csv('../data/Marks.csv')
+    return dataset_marks
+
+#refactor Students.csv
 def refactorStudentsCSV(dataset_students):
     cs = ChangerStudents(dataset_students)
     cs.changeBirthplace()
@@ -28,33 +33,41 @@ def refactorStudentsCSV(dataset_students):
     cs.changeTypeOfTraining()
     cs.addFIO()
     cs.dropColumns()
-    cs.saveAs()
-    print("2nd ---------", cs.dataset_students.head())
+    cs.toNumeric()
+    # cs.saveAs()
+    saver = Saver()
+    saver.saveToCSV(cs.dataset_students, r'..\data\Students_new.csv')
+
+#refactor Marks.csv
+def refactorMarksCSV(dataset_marks):
+    cm = ChangerMarks(dataset_marks)
+    cm.changeDisciplineType()
+    cm.changeMark()
+    cm.dropColumns()
+    cm.toNumeric()
+    # cm.saveAs()
+    saver = Saver()
+    saver.saveToCSV(cm.dataset_marks, r'..\data\Marks_new.csv')
+
+#union two csv Marks and Students
+def uniStudentAndMarks(dataset_students, dataset_marks):
+    unifier = Union(dataset_students, dataset_marks)
+    unifier.unionStudAndMarks()
+    saver=Saver()
+    saver.saveToCSV(unifier.data,r'..\data\Data.csv')
 
 
-
-# dataset_students.KINDTRAINING.unique()
-# dataset_students.TYPETRAINING.unique()
-# dataset_students.QUALIFICATIONTYPE.unique()
-# dataset_students.CATEGORYID.unique()
-# dataset_students.ISOBCHAGA.unique() --ok
-# dataset_students.MARTIALSTATUSID.unique() --ok
-# dataset_students.CREATICEACTIVE.unique()
-# dataset_students.OLIMPIADE.unique()
-# dataset_students.STUDSTATUS.unique() --?
-# dataset_students.TYPEOFSCHOOL.unique()
-# dataset_students.STUDTYPE_ID.unique()
-#dataset_students.STUDY_PLAN_ID.unique()
-
-
-
-# dataset_students["STUDENTID"] = dataset_students["STUDENTID"].apply(pd.to_numeric, errors='ignore')
-# data = pd.merge(dataset_students, dataset_marks, on='STUDENTID')
-# data.to_csv('Data.csv')
-
+#проверка уникальных значений в столбце
+# dataset_students.NAME_COLUMN.unique()
 
 if __name__ == '__main__':
-    dataset_students = readCSVStudents()
-    print("1st---------", dataset_students.head())
-    refactorStudentsCSV(dataset_students)
+    # dataset_students = readCSVStudents()
+    # refactorStudentsCSV(dataset_students)
+    # dataset_marks=readCSVMarks()
+    # refactorMarksCSV(dataset_marks)
+    dm = pd.read_csv('../data/Marks_new.csv')
+    ds = pd.read_csv('../data/Students_new.csv')
+    uniStudentAndMarks(ds, dm)
+
+
 
