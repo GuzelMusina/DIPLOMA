@@ -74,7 +74,7 @@ def refactorMSTeamsCSV(dms):
 # dataset_students.NAME_COLUMN.unique()
 
 if __name__ == '__main__':
-    dataset_students = readCSVStudents()
+    # dataset_students = readCSVStudents()
     # refactorStudentsCSV(dataset_students)
 
     # dataset_marks=readCSVMarks()
@@ -92,5 +92,7 @@ if __name__ == '__main__':
     # dstudmarks=pd.read_csv('../data/Data.csv')
     # mergeMSTeamsAndData(dstudmarks, dmsteams, 'FIO')
 
+    data = pd.read_csv('..\data\Логи.csv')
+    print(data.columns)
 
 
