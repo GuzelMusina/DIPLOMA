@@ -173,7 +173,7 @@ class ChangerStudents(object):
     def addFIO(self):
         fio_arr = []
         for j in range(0, len(self.dataset_students)):
-            st = str(self.dataset_students['NAME'][j]) + str(' ') + str(self.dataset_students['FAMILIA'][j]) + str(' ') + str(
+            st = str(str(self.dataset_students['FAMILIA'][j]) + str(' ') + str(self.dataset_students['NAME'][j])) + str(' ') + str(
                 self.dataset_students['OTCHESTVO'][j])
             fio_arr.append(st)
         self.dataset_students.insert(1, 'FIO', fio_arr, True)
