@@ -4,12 +4,13 @@ from python.ChangerStudents import ChangerStudents
 from python.ChangerMarks import ChangerMarks
 from python.ChangeMSTeams import ChangeMSTeams
 
-from python.helpers.Union import Union
+from python.helpers.Merger import Merger
 from python.helpers.Saver import Saver
 from python.helpers.Reader import Reader
 
 saver = Saver()
 reader = Reader()
+merger = Merger()
 # upload data
 def readCSVStudents():
     return reader.readCSV('../data/Students.csv')
@@ -52,12 +53,16 @@ def refactorMarksCSV(dataset_marks):
     # cm.saveAs()
     saver.saveToCSV(cm.dataset_marks, r'..\data\Marks_new.csv')
 
-#union two csv Marks and Students
-def uniStudentAndMarks(dataset_students, dataset_marks):
-    unifier = Union(dataset_students, dataset_marks)
-    unifier.unionStudAndMarks()
-    saver.saveToCSV(unifier.data,r'..\data\Data.csv')
+#merge two csv Marks and Students
+def mergeStudentAndMarks(dataset_students, dataset_marks, param):
+    dataset_students["STUDENTID"] = dataset_students["STUDENTID"].apply(pd.to_numeric, errors='ignore')
+    data = merger.merge(dataset_students, dataset_marks, param)
+    saver.saveToCSV(data,r'..\data\Data.csv')
 
+# merge MSTeams and Data (Students + Marks)
+def mergeMSTeamsAndData(datset_studmarks, dataset_msteams, param):
+    data = merger.merge(datset_studmarks, dataset_msteams, param)
+    saver.saveToCSV(data, r'..\data\StudMarksMSteams.csv')
 
 def refactorMSTeamsCSV(dms):
     changeMST = ChangeMSTeams(dms)
@@ -69,7 +74,7 @@ def refactorMSTeamsCSV(dms):
 # dataset_students.NAME_COLUMN.unique()
 
 if __name__ == '__main__':
-    # dataset_students = readCSVStudents()
+    dataset_students = readCSVStudents()
     # refactorStudentsCSV(dataset_students)
 
     # dataset_marks=readCSVMarks()
@@ -77,10 +82,15 @@ if __name__ == '__main__':
 
     # dm = pd.read_csv('../data/Marks_new.csv')
     # ds = pd.read_csv('../data/Students_new.csv')
-    # uniStudentAndMarks(ds, dm)
+    # mergeMSTeamsAndData(ds, dm, 'STUDENTID')
 
-    dms = readCSVMSTeams()
-    refactorMSTeamsCSV(dms)
+
+    # dms = readCSVMSTeams()
+    # refactorMSTeamsCSV(dms)
+
+    # dmsteams = pd.read_csv('../data/MSTeams_new.csv')
+    # dstudmarks=pd.read_csv('../data/Data.csv')
+    # mergeMSTeamsAndData(dstudmarks, dmsteams, 'FIO')
 
 
 
