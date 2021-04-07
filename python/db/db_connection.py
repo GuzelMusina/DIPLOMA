@@ -1,5 +1,6 @@
 import psycopg2
 from python.db.credentials import credentials
+import pandas as pd
 
 db_name=credentials.DB_NAME
 db_user=credentials.DB_USER
@@ -13,10 +14,14 @@ except:
     print("I am unable to connect to the database")
 
 cur = conn.cursor()
-cur.execute("INSERT INTO test (ID, NUM, DATA) VALUES (2, 12, 'name12')")
-conn.commit()
+# cur.execute("INSERT INTO test (ID, NUM, DATA) VALUES (2, 12, 'name12')")
+# conn.commit()
+# data = pd.read_csv(r'..\..\data\Logs_1.csv')
+data = open('..\..\data\Logs_1.csv', 'r')
 
-cur.execute("SELECT * from test")
-print("Результат", cur.fetchall())
+# cur.copy_from(data, "moodle_log", columns=('id', 'component', 'action', 'target',
+#                                            'objecttable', 'userid', 'courseid', 'timecreated',
+#                                            'movements', 'date', 'date_and_time'), sep=',')
+conn.commit()
 conn.close()
 cur.close()

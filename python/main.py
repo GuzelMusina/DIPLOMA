@@ -92,7 +92,12 @@ if __name__ == '__main__':
     # dstudmarks=pd.read_csv('../data/Data.csv')
     # mergeMSTeamsAndData(dstudmarks, dmsteams, 'FIO')
 
-    data = pd.read_csv('..\data\Логи.csv')
-    print(data.columns)
+    # data = pd.read_csv('..\data\Logs.csv', sep=';')
+    # data.rename(columns=({'Действие': 'movements', 'Дата': 'date', 'Дата и время': 'date_and_time'}), inplace=True)
+    # # print(data.head(1))
+    # renamed_df = data.to_csv("..\data\Logs_1.csv", index=None)
+
+    data = pd.read_csv('..\data\Logs_1.csv', sep=',')
+    print(data[0])
 
 
