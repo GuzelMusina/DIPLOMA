@@ -3,27 +3,39 @@ import pandas as pd
 from python.ChangerStudents import ChangerStudents
 from python.ChangerMarks import ChangerMarks
 from python.ChangeMSTeams import ChangeMSTeams
+from python.ChangeMoodle import ChangeMoodle
 
 from python.helpers.Merger import Merger
 from python.helpers.Saver import Saver
 from python.helpers.Reader import Reader
 
+import csv
+
 saver = Saver()
 reader = Reader()
 merger = Merger()
+
+
 # upload data
 def readCSVStudents():
     return reader.readCSV('../data/Students.csv')
+
 
 # upload data
 def readCSVMarks():
     dataset_marks = pd.read_csv('../data/Marks.csv')
     return dataset_marks
 
+
 def readCSVMSTeams():
     return reader.readCSV('../data/MicrosoftTeamsActivity.csv')
 
-#refactor Students.csv
+
+def readMoodleLogs():
+    return reader.readCSV('..\data\Logs_1.csv')
+
+
+# refactor Students.csv
 def refactorStudentsCSV(dataset_students):
     cs = ChangerStudents(dataset_students)
     cs.changeBirthplace()
@@ -43,7 +55,8 @@ def refactorStudentsCSV(dataset_students):
     # cs.saveAs()
     saver.saveToCSV(cs.dataset_students, r'..\data\Students_new.csv')
 
-#refactor Marks.csv
+
+# refactor Marks.csv
 def refactorMarksCSV(dataset_marks):
     cm = ChangerMarks(dataset_marks)
     cm.changeDisciplineType()
@@ -53,21 +66,36 @@ def refactorMarksCSV(dataset_marks):
     # cm.saveAs()
     saver.saveToCSV(cm.dataset_marks, r'..\data\Marks_new.csv')
 
-#merge two csv Marks and Students
-def mergeStudentAndMarks(dataset_students, dataset_marks, param):
-    dataset_students["STUDENTID"] = dataset_students["STUDENTID"].apply(pd.to_numeric, errors='ignore')
-    data = merger.merge(dataset_students, dataset_marks, param)
-    saver.saveToCSV(data,r'..\data\Data.csv')
-
-# merge MSTeams and Data (Students + Marks)
-def mergeMSTeamsAndData(datset_studmarks, dataset_msteams, param):
-    data = merger.merge(datset_studmarks, dataset_msteams, param)
-    saver.saveToCSV(data, r'..\data\StudMarksMSteams.csv')
 
 def refactorMSTeamsCSV(dms):
     changeMST = ChangeMSTeams(dms)
     changeMST.dropColumns()
     saver.saveToCSV(changeMST.dms, r'..\data\MSTeams_new.csv')
+
+
+def refactorMoodle(dml):
+    cml = ChangeMoodle(dml)
+    cml.dropColumns()
+    sorted_data = cml.sorted_by_userid()
+    pd.DataFrame(sorted_data).to_csv('..\data\Sorted_moodle.csv', index=None)
+    new_data = pd.read_csv('..\data\Sorted_moodle.csv')
+    diction = cml.analyzeLogs(new_data)
+    data = pd.DataFrame(diction)
+    # print(data)
+    saver.saveToCSV(data, '..\data\Moodle_final.csv')
+
+
+# merge two csv Marks and Students
+def mergeStudentAndMarks(dataset_students, dataset_marks, param):
+    dataset_students["STUDENTID"] = dataset_students["STUDENTID"].apply(pd.to_numeric, errors='ignore')
+    data = merger.merge(dataset_students, dataset_marks, param)
+    saver.saveToCSV(data, r'..\data\Data.csv')
+
+
+# merge MSTeams and Data (Students + Marks)
+def mergeMSTeamsAndData(datset_studmarks, dataset_msteams, param):
+    data = merger.merge(datset_studmarks, dataset_msteams, param)
+    saver.saveToCSV(data, r'..\data\StudMarksMSteams.csv')
 
 
 # проверка уникальных значений в столбце
@@ -84,7 +112,6 @@ if __name__ == '__main__':
     # ds = pd.read_csv('../data/Students_new.csv')
     # mergeMSTeamsAndData(ds, dm, 'STUDENTID')
 
-
     # dms = readCSVMSTeams()
     # refactorMSTeamsCSV(dms)
 
@@ -97,7 +124,7 @@ if __name__ == '__main__':
     # # print(data.head(1))
     # renamed_df = data.to_csv("..\data\Logs_1.csv", index=None)
 
-    data = pd.read_csv('..\data\Logs_1.csv', sep=',')
-    print(data[0])
+    data_moodle_logs = readMoodleLogs()
+    refactorMoodle(data_moodle_logs)
 
 
