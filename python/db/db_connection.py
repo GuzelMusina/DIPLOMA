@@ -16,8 +16,8 @@ except:
 cur = conn.cursor()
 # cur.execute("INSERT INTO test (ID, NUM, DATA) VALUES (2, 12, 'name12')")
 # conn.commit()
-# data = pd.read_csv(r'..\..\data\Logs_1.csv')
-data = open('..\..\data\Logs_1.csv', 'r')
+# data = pd.read_csv(r'..\..\data\MoodleLogs.csv')
+data = open('../../data/First Wave/MoodleLogs.csv', 'r')
 
 # cur.copy_from(data, "moodle_log", columns=('id', 'component', 'action', 'target',
 #                                            'objecttable', 'userid', 'courseid', 'timecreated',

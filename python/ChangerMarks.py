@@ -2,26 +2,26 @@ import pandas as pd
 
 #Data mining marks.csv file
 class ChangerMarks(object):
-    def __init__(self, dataset_marks):
-        self.dataset_marks = dataset_marks
+    def __init__(self, df):
+        self.df = df
 
     # change discipline type (string) to number
     # 0 - зачет (pass), пусто (empty)
     # 1 - экзамен (exam)
     # 2 - диф.зачет (pass with mark)
     def changeDisciplineType(self):
-        for i in range(0, len(self.dataset_marks)):
-            print(self.dataset_marks.loc[i, 'DISCIPLINETYPE'])
-            if self.dataset_marks.loc[i, 'DISCIPLINETYPE'] == 'зачет':
-                self.dataset_marks.loc[i, 'DISCIPLINETYPE'] = 0
-            elif self.dataset_marks.loc[i, 'DISCIPLINETYPE'] == 'экзамен':
-                self.dataset_marks.loc[i, 'DISCIPLINETYPE'] = 1
-            elif self.dataset_marks.loc[i, 'DISCIPLINETYPE'] == 'диф.зачет':
-                self.dataset_marks.loc[i, 'DISCIPLINETYPE'] = 2
+        for i in range(0, len(self.df)):
+            print(self.df.loc[i, 'DISCIPLINETYPE'])
+            if self.df.loc[i, 'DISCIPLINETYPE'] == 'зачет':
+                self.df.loc[i, 'DISCIPLINETYPE'] = 0
+            elif self.df.loc[i, 'DISCIPLINETYPE'] == 'экзамен':
+                self.df.loc[i, 'DISCIPLINETYPE'] = 1
+            elif self.df.loc[i, 'DISCIPLINETYPE'] == 'диф.зачет':
+                self.df.loc[i, 'DISCIPLINETYPE'] = 2
             else:
-                self.dataset_marks.loc[i, 'DISCIPLINETYPE'] = 0
+                self.df.loc[i, 'DISCIPLINETYPE'] = 0
 
-        print(self.dataset_marks['DISCIPLINETYPE'])
+        print(self.df['DISCIPLINETYPE'])
 
     # change marks (string) to number
     # 0 - не сдает (doesn't pass), пусто (empty)
@@ -33,40 +33,40 @@ class ChangerMarks(object):
     # 6 - зачтено (pass)
     # 7 - не зачтено (not pass)
     def changeMark(self):
-        for i in range(0, len(self.dataset_marks)):
-            print(self.dataset_marks.loc[i, 'MARK'])
-            if self.dataset_marks.loc[i, 'MARK'] == 'не сдает':
-                self.dataset_marks.loc[i, 'MARK'] = 0
-            elif self.dataset_marks.loc[i, 'MARK'] == 'отсут. по неув.':
-                self.dataset_marks.loc[i, 'MARK'] = 1
-            elif self.dataset_marks.loc[i, 'MARK'] == 'неудовлетворительно':
-                self.dataset_marks.loc[i, 'MARK'] = 2
-            elif self.dataset_marks.loc[i, 'MARK'] == 'удовлетворительно':
-                self.dataset_marks.loc[i, 'MARK'] = 3
-            elif self.dataset_marks.loc[i, 'MARK'] == 'хорошо':
-                self.dataset_marks.loc[i, 'MARK'] = 4
-            elif self.dataset_marks.loc[i, 'MARK'] == 'отлично':
-                self.dataset_marks.loc[i, 'MARK'] = 5
-            elif self.dataset_marks.loc[i, 'MARK'] == 'зачтено':
-                self.dataset_marks.loc[i, 'MARK'] = 6
-            elif self.dataset_marks.loc[i, 'MARK'] == 'не зачтено':
-                self.dataset_marks.loc[i, 'MARK'] = 7
-            elif self.dataset_marks.loc[i, 'MARK'] == '0':
-                self.dataset_marks.loc[i, 'MARK'] = 8
+        for i in range(0, len(self.df)):
+            print(self.df.loc[i, 'MARK'])
+            if self.df.loc[i, 'MARK'] == 'не сдает':
+                self.df.loc[i, 'MARK'] = 0
+            elif self.df.loc[i, 'MARK'] == 'отсут. по неув.':
+                self.df.loc[i, 'MARK'] = 1
+            elif self.df.loc[i, 'MARK'] == 'неудовлетворительно':
+                self.df.loc[i, 'MARK'] = 2
+            elif self.df.loc[i, 'MARK'] == 'удовлетворительно':
+                self.df.loc[i, 'MARK'] = 3
+            elif self.df.loc[i, 'MARK'] == 'хорошо':
+                self.df.loc[i, 'MARK'] = 4
+            elif self.df.loc[i, 'MARK'] == 'отлично':
+                self.df.loc[i, 'MARK'] = 5
+            elif self.df.loc[i, 'MARK'] == 'зачтено':
+                self.df.loc[i, 'MARK'] = 6
+            elif self.df.loc[i, 'MARK'] == 'не зачтено':
+                self.df.loc[i, 'MARK'] = 7
+            elif self.df.loc[i, 'MARK'] == '0':
+                self.df.loc[i, 'MARK'] = 8
             else:
-                self.dataset_marks.loc[i, 'DISCIPLINETYPE'] = 0
+                self.df.loc[i, 'DISCIPLINETYPE'] = 0
 
     # drop column hours and passdate
     def dropColumns(self):
-        self.dataset_marks.drop(['HOURS', 'PASSDATE'], axis='columns', inplace=True)
+        self.df.drop(['HOURS', 'PASSDATE'], axis='columns', inplace=True)
 
     # convert columns from float to integer
     def toNumeric(self):
-        self.dataset_marks["BALLSTOTAL"] = pd.to_numeric(self.dataset_marks["BALLSTOTAL"], downcast='integer')
-        self.dataset_marks["MARK"] = pd.to_numeric(self.dataset_marks["MARK"], downcast='integer')
+        self.df["BALLSTOTAL"] = pd.to_numeric(self.df["BALLSTOTAL"], downcast='integer')
+        self.df["MARK"] = pd.to_numeric(self.df["MARK"], downcast='integer')
 
     #save to csv
     def saveAs(self):
         print("SAVEEEEEEE_____________________________________________________")
-        self.dataset_marks.to_csv(r'..\data\Marks_new.csv')
+        self.df.to_csv(r'..\data\Marks_new.csv')
 
