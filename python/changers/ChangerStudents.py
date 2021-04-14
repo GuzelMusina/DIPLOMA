@@ -20,6 +20,34 @@ class ChangerStudents(object):
                 self.df.loc[i, 'BIRTHPLACE'] = 3
             elif self.df.loc[i, 'BIRTHPLACE'] == 'РЕСПУБЛИКА КАЗАХСТАН':
                 self.df.loc[i, 'BIRTHPLACE'] = 4
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'РЕСПУБЛИКА ТАДЖИКИСТАН':
+                self.df.loc[i, 'BIRTHPLACE'] = 5
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'КЫРГЫЗСКАЯ РЕСПУБЛИКА':
+                self.df.loc[i, 'BIRTHPLACE'] = 6
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'ИНДОНЕЗИЯ':
+                self.df.loc[i, 'BIRTHPLACE'] = 7
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'МОЛДОВА':
+                self.df.loc[i, 'BIRTHPLACE'] = 8
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'АЗЕРБАЙДЖАНСКАЯ РЕСПУБЛИКА':
+                self.df.loc[i, 'BIRTHPLACE'] = 9
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'УКРАИНА':
+                self.df.loc[i, 'BIRTHPLACE'] = 10
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'РЕСПУБЛИКА АРМЕНИЯ':
+                self.df.loc[i, 'BIRTHPLACE'] = 11
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'ГВАТЕМАЛА':
+                self.df.loc[i, 'BIRTHPLACE'] = 12
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'ГРУЗИЯ':
+                self.df.loc[i, 'BIRTHPLACE'] = 13
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'ЧАД':
+                self.df.loc[i, 'BIRTHPLACE'] = 14
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'НИГЕРИЯ':
+                self.df.loc[i, 'BIRTHPLACE'] = 15
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'РЕСПУБЛИКА ЗАМБИЯ':
+                self.df.loc[i, 'BIRTHPLACE'] = 16
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'КОЛУМБИЯ':
+                self.df.loc[i, 'BIRTHPLACE'] = 17
+            elif self.df.loc[i, 'BIRTHPLACE'] == 'АФГАНИСТАН':
+                self.df.loc[i, 'BIRTHPLACE'] = 18
         print("BIRTHPLACE", self.df['BIRTHPLACE'])
 
     def changeIsMedale(self):
