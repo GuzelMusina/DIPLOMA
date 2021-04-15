@@ -130,23 +130,25 @@ class ChangerMarks(object):
         count_total = df['BALLSTOTAL'][0]
         arr_balls_total = [count_total]
         arr_studentid = df.STUDENTID.unique()
+        count_subjects = 1
 
         for i in range(1, len(df)):
             if df['STUDENTID'][i - 1] == df['STUDENTID'][i]:
                 # то увеличиваем counts
                 count_total = count_total + df['BALLSTOTAL'][i]
+                count_subjects = count_subjects + 1
 
             elif df['STUDENTID'][i - 1] != df['STUDENTID'][i]:
                 print('count total', count_total, 'STUDENT ID i-1 ', df['STUDENTID'][i - 1],
                       ' STUDENT ID i-1 ', df['STUDENTID'][i])
 
-                arr_balls_total.append(count_total)
-
+                arr_balls_total.append(count_total/count_subjects)
+                count_subjects=1
                 count_total = df['BALLSTOTAL'][i]
 
-        if len(arr_studentid)>len(arr_balls_total):
+        if len(arr_studentid) > len(arr_balls_total):
             print('БОЛЬШЕ длина userid = ', len(arr_studentid), 'длина count = ', len(arr_balls_total))
-        elif len(arr_studentid)<len(arr_balls_total):
+        elif len(arr_studentid) < len(arr_balls_total):
             print('МЕНЬШЕ длина userid = ', len(arr_studentid), 'длина count = ', len(arr_balls_total))
         else:
             print('РАВНО длина userid = ', len(arr_studentid), 'длина count = ', len(arr_balls_total))

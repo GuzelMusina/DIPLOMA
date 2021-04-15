@@ -40,7 +40,7 @@ class ChangerMoodleStud(object):
         else:
             print('РАВНО длина userid = ', len(arr_fio), 'длина count = ', len(arr_balls_total))
 
-        diction = {'FI': arr_fio, 'BALLSTOTAL': arr_balls_total}
+        diction = {'FI': arr_fio, 'COUNT_ACTIVITIES': arr_balls_total}
         print(diction)
         data = pd.DataFrame(diction)
         # data.to_csv('..\data\MARKS_FINAL.csv', index=False)

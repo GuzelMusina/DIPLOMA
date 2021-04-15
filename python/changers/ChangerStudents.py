@@ -57,6 +57,10 @@ class ChangerStudents(object):
                 self.df.loc[i, 'MEDALE']=0
             elif self.df.loc[i, 'MEDALE'] == 'Диплом с отличием':
                 self.df.loc[i, 'MEDALE']=1
+            elif self.df.loc[i, 'MEDALE'] == 'Золотая':
+                self.df.loc[i, 'MEDALE']=2
+            elif self.df.loc[i, 'MEDALE'] == 'Серебряная':
+                self.df.loc[i, 'MEDALE']=3
 
     def changeInstitute(self):
         #заменяем по институту

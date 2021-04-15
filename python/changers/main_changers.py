@@ -45,8 +45,8 @@ def refactorMarksCSV(dataset_marks):
     changer_marks_eor.toNumeric()
 
     sorted_data = changer_marks_eor.sortByStudentID()
-    pd.DataFrame(sorted_data).to_csv('../../data/Middle Wave/Sorted_marks.csv', index=None)
-    new_data = pd.read_csv('../../data/Middle Wave/Sorted_marks.csv')
+    pd.DataFrame(sorted_data).to_csv('../data/Middle Wave/Sorted_marks.csv', index=None)
+    new_data = pd.read_csv('../data/Middle Wave/Sorted_marks.csv')
     diction = changer_marks_eor.analyzeMarks(new_data)
     data = pd.DataFrame(diction)
     saver.saveToCSV(data, r'..\data\Middle Wave\Marks_FINAL.csv')
@@ -78,7 +78,7 @@ def refactorStudentsMoodle(dataset_studnets_moodle):
 def refactorFinalMoodle(dataset_final_moodle):
     final_changer = ChangerMoodleStud(dataset_final_moodle)
     sorted_data = final_changer.sortData()
-    pd.DataFrame(sorted_data).to_csv('../../data/Middle Wave/Sorted_final_moodle.csv', index=None)
+    pd.DataFrame(sorted_data).to_csv('../data/Middle Wave/Sorted_final_moodle.csv', index=None)
     new_data = pd.read_csv('../../data/Middle Wave/Sorted_final_moodle.csv')
     diction = final_changer.analyzeData(new_data)
     data = pd.DataFrame(diction)
@@ -109,7 +109,7 @@ def mergeMoodleTeamsOnlineUni(dataset_moodle, dataset_msteams_student_marks, par
 if __name__ == '__main__':
 
     # dataset_students_eor = reader.readCSV('../data/First Wave/Students.csv')
-    # refactorStudentsCSV(dataset_students)
+    # refactorStudentsCSV(dataset_students_eor)
 
     # dataset_marks_eor=reader.readCSV('../data/First Wave/Marks.csv')
     # refactorMarksCSV(dataset_marks_eor)
@@ -146,10 +146,10 @@ if __name__ == '__main__':
     # dataset_final_moodle = reader.readCSV('../data/Final Wave/FinalMoodle.csv')
     # refactorFinalMoodle(dataset_final_moodle)
 
-    dataset_final_moodle = reader.readCSV('../data/Final Wave/MoodleFinalFinal.csv')
-    dataset_final_msteams_eor = reader.readCSV('../data/Final Wave/StudMarksMSteams.csv')
-
-    mergeMoodleTeamsOnlineUni(dataset_final_moodle,dataset_final_msteams_eor, 'FI')
+    # dataset_final_moodle = reader.readCSV('../data/Final Wave/MoodleFinalFinal.csv')
+    # dataset_final_msteams_eor = reader.readCSV('../data/Final Wave/StudMarksMSteams.csv')
+    #
+    # mergeMoodleTeamsOnlineUni(dataset_final_moodle,dataset_final_msteams_eor, 'FI')
 
 
 
