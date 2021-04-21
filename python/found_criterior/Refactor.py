@@ -4,10 +4,10 @@ pd.set_option('display.max_columns', None)
 class Refactor(object):
 
     df = pd.read_csv('Data_with_class.csv')
-    df_class0 = df[df['CLASS']==0]
-    df_class1 = df[df['CLASS']==1]
-    df_class2 = df[df['CLASS']==2]
-    df_class3 = df[df['CLASS']==3]
+    # df_class0 = df[df['CLASS']==0]
+    # df_class1 = df[df['CLASS']==1]
+    # df_class2 = df[df['CLASS']==2]
+    # df_class3 = df[df['CLASS']==3]
 
     for i in range(len(df)):
         if df.loc[i, 'SEX'] == 2:
