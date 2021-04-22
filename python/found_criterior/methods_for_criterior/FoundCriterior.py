@@ -1,7 +1,7 @@
 W = [1, 0.1, 0.1, 0.1, 0.5,
      0.1, 0.1, 0.1, 0.5, 0.1, 0.5
     , 0.1, 0.5, 0.1, 0.5, 0.1, 0.5, 0.1, 0.5
-    , 0.1, 0.5, 0.5, 1, 0.5, 0.5, 0.1, 0.1, 0.1, 1]
+    , 0.1, 0.5, 0.5, 1, 0.5, 0.5, 0.1, 0.1, 0.1, 2]
 
 matrix = {'COUNT_ACTIVITIES': [45, 57, 50, 50], 'SEX': [1, 1, 1, 1],
           'BIRTHPLACE': [0, 0, 0, 0], 'INSTITUTEID': [1, 1, 1, 1],
@@ -196,8 +196,10 @@ def algorithmFoundCriterio(df, PERCENTAGE):
         parametrs = 0
         # print(stud_sum)
 
-        if stud_sum >= 5.1:
+        if stud_sum >= 6:
             success.append('success')
+        elif stud_sum>=5:
+            success.append('partly success')
         else:
             success.append('-')
 

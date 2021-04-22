@@ -21,6 +21,18 @@ class Refactor(object):
     for i in range(len(df)):
         if df.loc[i, 'CREATICEACTIVE'] == 2:
             df.loc[i, 'CREATICEACTIVE'] = 1
+    for i in range(len(df)):
+        if df.loc[i, 'BIRTHPLACE'] > 0:
+            df.loc[i, 'BIRTHPLACE'] = 1
+
+    columnsTitles = ['COUNT_ACTIVITIES', 'SEX', 'BIRTHPLACE', 'INSTITUTEID', 'ISOBCHAGA',
+                     'MARTIALSTATUSID', 'PUBLICATIONS', 'CONFERENCE', 'STUDACTIVE',
+                     'CREATICEACTIVE', 'SOCIALACTIVE', 'MEDALE', 'OLIMPIADE', 'TYPEOFSCHOOL',
+                     'COUNT_METTINGS', 'TIME_AUDIO_MINUTES',
+                     'TIME_VIDEO_MINUTES', 'SHARE_SCREEN_MINUTES', 'TET_A_TET_CALLS',
+                     'MS_MESSAGES', 'BALLSTOTAL']
+    df = df.reindex(columns=columnsTitles)
+    # df.to_csv('Data_with_class.csv')
 
     names = df.columns
 
