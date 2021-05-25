@@ -5,8 +5,8 @@ from sklearn import metrics
 def NaiveBayes(X_train, X_test, y_train, y_test):
     model = GaussianNB()
     model.fit(X_train, y_train.ravel())
-    expected = y_train.ravel()
-    predicted = model.predict(X_train)
+    expected = y_test.ravel()
+    predicted = model.predict(X_test)
 
     acc = accuracy_score(expected, predicted)
 

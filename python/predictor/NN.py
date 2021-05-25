@@ -3,6 +3,8 @@ from keras.models import Sequential
 from keras.layers import Dense
 import pandas as pd
 import numpy as np
+import sklearn.metrics as metrics
+from sklearn.metrics import accuracy_score
 
 # To remove the scientific notation from numpy arrays
 np.set_printoptions(suppress=True)
@@ -51,106 +53,78 @@ def FunctionFindBestParams(X_train, y_train, X_test, y_test):
     return (SearchResultsData)
 
 
-def NN(df):
+def NN(X_train, X_test, y_train, y_test):
 
-    temp=[]
-    for i in range(len(df)):
-        if df.loc[i,'CLASS'] == 0:
-            temp.append(0)
-        elif df.loc[i,'CLASS'] == 1:
-            temp.append(1)
-        elif df.loc[i,'CLASS'] == 2 or df.loc[i,'CLASS'] == 3:
-            temp.append(2)
+    # temp=[]
+    # for i in range(len(df)):
+    #     if df.loc[i,'CLASS'] == 0:
+    #         temp.append(0)
+    #     elif df.loc[i,'CLASS'] == 1:
+    #         temp.append(1)
+    #     elif df.loc[i,'CLASS'] == 2 or df.loc[i,'CLASS'] == 3:
+    #         temp.append(2)
+    #
+    # df['CLASS_CHECK'] = temp
+    #
+    # TargetVariable = ['SUCCESS_METRICS_NUMBERS']
+    # Predictors = ['COUNT_ACTIVITIES', 'SEX', 'BIRTHPLACE', 'ISOBCHAGA', 'MARTIALSTATUSID',
+    #               'PUBLICATIONS', 'CONFERENCE', 'STUDACTIVE', 'CREATICEACTIVE',
+    #               'SOCIALACTIVE', 'MEDALE', 'OLIMPIADE', 'TYPEOFSCHOOL', 'COUNT_METTINGS',
+    #               'TIME_AUDIO_MINUTES', 'TIME_VIDEO_MINUTES', 'SHARE_SCREEN_MINUTES',
+    #               'TET_A_TET_CALLS', 'MS_MESSAGES', 'BALLSTOTAL', 'CLASS']
 
-    df['CLASS_CHECK'] = temp
-
-    TargetVariable = ['SUCCESS_METRICS_NUMBERS']
-    Predictors = ['COUNT_ACTIVITIES', 'SEX', 'BIRTHPLACE', 'ISOBCHAGA', 'MARTIALSTATUSID',
-                  'PUBLICATIONS', 'CONFERENCE', 'STUDACTIVE', 'CREATICEACTIVE',
-                  'SOCIALACTIVE', 'MEDALE', 'OLIMPIADE', 'TYPEOFSCHOOL', 'COUNT_METTINGS',
-                  'TIME_AUDIO_MINUTES', 'TIME_VIDEO_MINUTES', 'SHARE_SCREEN_MINUTES',
-                  'TET_A_TET_CALLS', 'MS_MESSAGES', 'BALLSTOTAL', 'CLASS']
-
-    X = df[Predictors].values
-    y = df[TargetVariable].values
-
-    ### Sandardization of data ###
-    from sklearn.preprocessing import StandardScaler
-
-    PredictorScaler = StandardScaler()
-    TargetVarScaler = StandardScaler()
-
-    # Storing the fit object for later reference
-    PredictorScalerFit = PredictorScaler.fit(X)
-    TargetVarScalerFit = TargetVarScaler.fit(y)
-
-    # Generating the standardized values of X and y
-    X = PredictorScalerFit.transform(X)
-    y = TargetVarScalerFit.transform(y)
-
-    # Split the data into training and testing set
-    from sklearn.model_selection import train_test_split
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-
+    INPUT = 9
+    UNITS = 36
+    # importing the libraries
+    from keras.models import Sequential
+    from keras.layers import Dense
 
     # create ANN model
     model = Sequential()
 
     # Defining the Input layer and FIRST hidden layer, both are same!
-    model.add(Dense(units=5, input_dim=21, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(units=36, input_dim=INPUT, kernel_initializer='normal', activation='linear'))
 
     # Defining the Second layer of the model
     # after the first layer we don't have to specify input_dim as keras configure it automatically
-    model.add(Dense(units=5, kernel_initializer='normal', activation='tanh'))
-
-    # The output neuron is a single fully connected node
+    model.add(Dense(units=72, kernel_initializer='normal', activation='linear'))
+    model.add(Dense(units=72, kernel_initializer='normal', activation='linear'))
+        # The output neuron is a single fully connected node
     # Since we will be predicting a single number
     model.add(Dense(1, kernel_initializer='normal'))
 
+    # Compile the network :
+    model.compile(loss='mean_absolute_error', optimizer='RMSProp', metrics=['mean_absolute_error'])
+    model.summary()
+
     # Compiling the model
-    model.compile(loss='mean_squared_error', optimizer='adam')
+    model.compile(loss='mean_absolute_error', optimizer='RMSProp')
 
     # Fitting the ANN to the Training set
-    model.fit(X_train, y_train ,batch_size = 20, epochs = 150, verbose=1)
-######################################################
-# Calling the function
-#     ResultsData = FunctionFindBestParams(X_train, y_train, X_test, y_test)
+    model.fit(X_train, y_train, batch_size=20, epochs=50)
 
-    # Fitting the ANN to the Training set
-    model.fit(X_train, y_train, batch_size=20, epochs=100, verbose=0)
+    predict = model.predict(X_test)
+    predict = abs(predict.ravel())
+    expect = y_test.ravel()
+    for i in range(len(predict)):
+        predict[i] = int(round(predict[i]))
+    expect = y_test.ravel()
 
-    # Generating Predictions on testing data
-    Predictions = model.predict(X_test)
+    mae = metrics.mean_absolute_error(expect, predict)
+    mse = metrics.mean_squared_error(expect, predict)
+    rmse = np.sqrt(mse)  # or mse**(0.5)
+    r2 = metrics.r2_score(expect, predict)
 
-    # Scaling the predicted Price data back to original price scale
-    Predictions = TargetVarScalerFit.inverse_transform(Predictions)
+    print("Results of sklearn.metrics:")
+    print("MAE:", mae)
+    print("MSE:", mse)
+    print("RMSE:", rmse)
+    print("R-Squared:", r2)
 
-    # Scaling the y_test Price data back to original price scale
-    y_test_orig = TargetVarScalerFit.inverse_transform(y_test)
+    print(metrics.classification_report(expect, predict))
+    print(metrics.confusion_matrix(expect, predict))
 
-    # Scaling the test data back to original scale
-    Test_Data = PredictorScalerFit.inverse_transform(X_test)
-
-    TestingData = pd.DataFrame(data=Test_Data, columns=Predictors)
-    TestingData['SUCCESS_METRICS_NUMBERS'] = y_test_orig
-
-    for i in range(len(Predictions)):
-        Predictions[i] = int(Predictions[i])
-
-    TestingData['SUCCESS_METRICS_NUMBERS_PREDICT'] = Predictions
-
-
-    # Computing the absolute percent error
-    APE = 100 * (abs(TestingData['SUCCESS_METRICS_NUMBERS'] - TestingData['SUCCESS_METRICS_NUMBERS_PREDICT']) /
-                 TestingData['SUCCESS_METRICS_NUMBERS'])
-    TestingData['APE'] = APE
-
-    acc = 100 - np.mean(APE)
-    print('The Accuracy of ANN model is:', acc)
-
-    return acc
+    # return accuracy_score(expect, predict)
 
 
 
