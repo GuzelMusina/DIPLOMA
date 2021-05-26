@@ -1,5 +1,5 @@
 import psycopg2
-from python.db.credentials import credentials
+from python_pack.db.credentials import credentials
 import pandas as pd
 
 db_name=credentials.DB_NAME

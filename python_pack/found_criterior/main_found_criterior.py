@@ -1,16 +1,10 @@
-import pandas as pd
-
-from python.helpers.Reader import Reader
-from python.helpers.Saver import Saver
+from streamlit.Reader import Reader
+from python_pack.helpers.Saver import Saver
 
 
-# from python.found_criterior.Refactor import Refactor
+# from python_pack.found_criterior.Refactor import Refactor
 
-import python.found_criterior.methods_for_criterior.FoundCriterior as foundCriterior
-
-from python.found_criterior.methods_for_criterior.FeautureSelector import FeatureSelector
-import python.found_criterior.methods_for_criterior.T_SNE as tsne
-
+import python_pack.found_criterior.methods_for_criterior.FoundCriterior as foundCriterior
 
 reader = Reader()
 saver = Saver()

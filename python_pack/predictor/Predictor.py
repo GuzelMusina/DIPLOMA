@@ -7,10 +7,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_error
 
-from python.predictor.DesicionTree import DecisonTreeRegressor
-from python.predictor.SVM import SVM
-from python.predictor.NaiveBayes import NaiveBayes
-from python.predictor.NN import NN
+from python_pack.predictor.DesicionTree import DecisonTreeRegressor
+from python_pack.predictor.SVM import SVM
+from python_pack.predictor.NaiveBayes import NaiveBayes
+from python_pack.predictor.NN import NN
 
 
 # Split the data into training and testing set

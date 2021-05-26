@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 plt.style.use('fivethirtyeight')
 
@@ -14,7 +15,7 @@ import plotly.figure_factory as ff
 
 df = pd.read_csv("Data.csv")
 plt.rcParams['figure.figsize'] = (20, 10)
-# sns.heatmap(df.corr(),annot = True, cmap= 'coolwarm')
+sns.heatmap(df.corr(),annot = True, cmap= 'coolwarm')
 plt.title('Heatmap for the Data', fontsize = 20)
 plt.show()
 plt.savefig('correlation.png')
