@@ -1,28 +1,29 @@
-import html as html
 import time
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import plotly.express as px
 import seaborn as sns
+import time
 
-from plotly.subplots import make_subplots
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import streamlit as st
+
+import base64
 
 plt.style.use('fivethirtyeight')
 # Split the data into training and testing set
 from sklearn.model_selection import train_test_split
 
 # for interactive visualizations
-import plotly.offline as py
-from plotly.offline import init_notebook_mode, iplot
+from plotly.offline import init_notebook_mode
 import plotly.graph_objs as go
-from plotly import tools
 import sklearn.metrics as metrics
 init_notebook_mode(connected=True)
-import plotly.figure_factory as ff
 
-from IPython.display import HTML
 
 # from python_pack.predictor.Predictor import Predictors
 
@@ -94,6 +95,39 @@ def NN(X_train, X_test, y_train, y_test):
     st.write(metrics.confusion_matrix(expect, predict))
 
     # return accuracy_score(expect, predict)
+# def highlight_max(x):
+#     return ['background-color: yellow' if v == x.max() else ''
+#                 for v in x]
+#
+# df = pd.DataFrame(np.random.randn(5, 2))
+# df.style.apply(highlight_max)
+
+# def highlight_max(s):
+#     '''
+#     highlight the maximum in a Series yellow.
+#     '''
+#     is_max = s == s.max()
+#     return ['background-color: yellow' if v else '' for v in is_max]
+
+# def color_negative_red(val):
+#     """
+#     Takes a scalar and returns a string with
+#     the css property `'color: red'` for negative
+#     strings, black otherwise.
+#     """
+#     color = 'red' if val < 0 else 'black'
+#     return 'color: %s' % color
+
+def highlight_classes(x):
+    # if x<56:
+    #     color='red'
+    # elif x>=56 and x<71:
+    #     color='yellow'
+    # else:
+    #     color='green'
+    # return color
+    return ['background-color: yellow' if v == x.max() else '' for v in x]
+
 
 menu = st.sidebar.markdown("# Меню")
 select_event_add_and_refactor_and_clustering = st.sidebar.selectbox('Шаг 1',
@@ -145,9 +179,11 @@ if select_event_add_and_refactor_and_clustering == 'Загрузить, обра
         elif select_event_add_and_refactor_and_clustering == "MoodleStudents.csv":
             st.text(dataset_students_moodle.head())
 
-        if st.button("Обработать данные"):
-            df = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
-            st.dataframe(df.style.highlight_max(axis=0))
+
+
+        # if st.button("Обработать данные"):
+            # df = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
+            # st.dataframe(df.style.apply(highlight_classes, subset=['BALLSTOTAL']))
 
         if st.button("Кластеризоать"):
             select_event_add_and_refactor_and_clustering = "Кластризовать данные"
@@ -228,20 +264,20 @@ if select_event_success_criterior=='Определить критерии усп
 
 select_event_success_criterior = st.sidebar.selectbox('Шаг 3',
                                                        ['', 'Прогнозирвование успешности'])
-if select_event_success_criterior=='Прогнозирвование успешности':
+# if select_event_success_criterior=='Прогнозирвование успешности':
 
-    TargetVariable = ['SUCCESS_METRICS_NUMBERS']
-    Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS', 'SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
-                  'TIME_AUDIO_MINUTES', 'MS_MESSAGES', 'TET_A_TET_CALLS', 'TYPEOFSCHOOL',
-                  'PUBLICATIONS']
+    # TargetVariable = ['SUCCESS_METRICS_NUMBERS']
+    # Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS', 'SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
+    #               'TIME_AUDIO_MINUTES', 'MS_MESSAGES', 'TET_A_TET_CALLS', 'TYPEOFSCHOOL',
+    #               'PUBLICATIONS']
+    #
+    # X = df[Predictors].values
+    # y = df[TargetVariable].values
+    #
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+    # ACC_NN = NN(X_train, X_test, y_train, y_test)
 
-    X = df[Predictors].values
-    y = df[TargetVariable].values
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
-    ACC_NN = NN(X_train, X_test, y_train, y_test)
-
-df_now = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
+# df_now = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
 df_orig = pd.read_csv('data/Final Wave/Final.csv')
 df_orig.drop(df_orig[df_orig.BALLSTOTAL == -1].index, inplace=True)
 
@@ -252,7 +288,12 @@ df_orig.drop(df_orig[df_orig['TIME_VIDEO_MINUTES']>4000].index, inplace=True)
 df_orig.drop(df_orig[df_orig['SHARE_SCREEN_MINUTES']>2000].index, inplace=True)
 df_orig.sort_index(inplace=True)
 
-# st.dataframe(df_orig)
-# st.dataframe(df)
 
-# st.write(len(df_orig), len(df))
+id = st.text_input("Введите id студента: ", help='Посмотреть id вы можете загрузив файл "SPISOK.txt"')
+temp_file = pd.DataFrame(df_orig.loc[:, 'FIO'])
+temp_file.to_csv('streamlit_pack/SPISOK.csv')
+href = f'<a href="data:file/SPISOK.csv">Download CSV File</a>'
+st.markdown(href, unsafe_allow_html=True)
+
+st.write(df_orig.loc[int(id),:])
+st.write(df.loc[int(id),'SUCCESS_METRICS_WORDS'])

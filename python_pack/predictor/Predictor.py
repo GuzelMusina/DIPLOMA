@@ -1,15 +1,8 @@
 import pandas as pd
-from sklearn import tree
+import streamlit as st
 
 # Import the necessary modules and libraries
-import numpy as np
 
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_absolute_error
-
-from python_pack.predictor.DesicionTree import DecisonTreeRegressor
-from python_pack.predictor.SVM import SVM
-from python_pack.predictor.NaiveBayes import NaiveBayes
 from python_pack.predictor.NN import NN
 
 
@@ -17,6 +10,7 @@ from python_pack.predictor.NN import NN
 from sklearn.model_selection import train_test_split
 
 if __name__ == '__main__':
+    st.write("HIII")
     df = pd.read_csv('../found_criterior/New_data.csv')
     TargetVariable = ['SUCCESS_METRICS_NUMBERS']
     Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS','SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
@@ -30,10 +24,10 @@ if __name__ == '__main__':
 
     # ACC_DECISION_TREE = DecisonTreeRegressor(X_train, X_test, y_train, y_test)
     # print(ACC_DECISION_TREE)
-
+    #
     # ACC_SVM = SVM(X_train, X_test, y_train, y_test)
     # print(ACC_SVM)
-
+    #
     # ACC_NAIVE_BAYES = NaiveBayes(X_train, X_test, y_train, y_test)
     # print(ACC_NAIVE_BAYES)
 
