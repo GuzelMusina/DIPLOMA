@@ -181,13 +181,13 @@ if select_event_add_and_refactor_and_clustering == 'Загрузить, обра
 
 
 
-        # if st.button("Обработать данные"):
-            # df = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
-            # st.dataframe(df.style.apply(highlight_classes, subset=['BALLSTOTAL']))
+        if st.button("Обработать данные"):
+            df = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
+            st.dataframe(df.style.apply(highlight_classes, subset=['BALLSTOTAL']))
 
         if st.button("Кластеризоать"):
             select_event_add_and_refactor_and_clustering = "Кластризовать данные"
-            # df = pd.read_csv('python_pack/found_criterior/New_data.csv')
+            df = pd.read_csv('python_pack/found_criterior/New_data.csv')
             st.markdown("Даные кластеризованы по методу T-SNE")
             st.markdown("### В меню вы можете выбрать пункт из списка 'Посмотреть данные' для того,"
                         "чтобы подробнее ознакомиться с данными")
@@ -264,36 +264,76 @@ if select_event_success_criterior=='Определить критерии усп
 
 select_event_success_criterior = st.sidebar.selectbox('Шаг 3',
                                                        ['', 'Прогнозирвование успешности'])
-# if select_event_success_criterior=='Прогнозирвование успешности':
+if select_event_success_criterior=='Прогнозирвование успешности':
 
-    # TargetVariable = ['SUCCESS_METRICS_NUMBERS']
-    # Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS', 'SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
-    #               'TIME_AUDIO_MINUTES', 'MS_MESSAGES', 'TET_A_TET_CALLS', 'TYPEOFSCHOOL',
-    #               'PUBLICATIONS']
-    #
-    # X = df[Predictors].values
-    # y = df[TargetVariable].values
-    #
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
-    # ACC_NN = NN(X_train, X_test, y_train, y_test)
+    TargetVariable = ['SUCCESS_METRICS_NUMBERS']
+    Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS', 'SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
+                  'TIME_AUDIO_MINUTES', 'MS_MESSAGES', 'TET_A_TET_CALLS', 'TYPEOFSCHOOL',
+                  'PUBLICATIONS']
+
+    X = df[Predictors].values
+    y = df[TargetVariable].values
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+    ACC_NN = NN(X_train, X_test, y_train, y_test)
 
 # df_now = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
-df_orig = pd.read_csv('data/Final Wave/Final.csv')
-df_orig.drop(df_orig[df_orig.BALLSTOTAL == -1].index, inplace=True)
+    df_orig = pd.read_csv('data/Final Wave/Final.csv')
+    df_orig.drop(df_orig[df_orig.BALLSTOTAL == -1].index, inplace=True)
 
-df_orig.drop(df_orig[df_orig['COUNT_ACTIVITIES']>1000].index, inplace=True)
-df_orig.drop(df_orig[df_orig['COUNT_METTINGS']>140].index, inplace=True)
-df_orig.drop(df_orig[df_orig['TIME_AUDIO_MINUTES']>10000].index, inplace=True)
-df_orig.drop(df_orig[df_orig['TIME_VIDEO_MINUTES']>4000].index, inplace=True)
-df_orig.drop(df_orig[df_orig['SHARE_SCREEN_MINUTES']>2000].index, inplace=True)
-df_orig.sort_index(inplace=True)
+    df_orig.drop(df_orig[df_orig['COUNT_ACTIVITIES']>1000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['COUNT_METTINGS']>140].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['TIME_AUDIO_MINUTES']>10000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['TIME_VIDEO_MINUTES']>4000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['SHARE_SCREEN_MINUTES']>2000].index, inplace=True)
+    df_orig.sort_index(inplace=True)
 
 
-id = st.text_input("Введите id студента: ", help='Посмотреть id вы можете загрузив файл "SPISOK.txt"')
-temp_file = pd.DataFrame(df_orig.loc[:, 'FIO'])
-temp_file.to_csv('streamlit_pack/SPISOK.csv')
-href = f'<a href="data:file/SPISOK.csv">Download CSV File</a>'
-st.markdown(href, unsafe_allow_html=True)
+    id = st.text_input("Введите id студента: ", help='Посмотреть id вы можете загрузив файл "SPISOK.csv"')
+    temp_file = pd.DataFrame(df_orig.loc[:, 'FIO'])
+    csv = temp_file.to_csv()
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}">Скачать файл SPISOK.csv</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
-st.write(df_orig.loc[int(id),:])
-st.write(df.loc[int(id),'SUCCESS_METRICS_WORDS'])
+    if id!='':
+        st.write(df_orig.loc[int(id),:])
+        st.write(df.loc[int(id),'SUCCESS_METRICS_WORDS'])
+
+    st.markdown("Вы также можете выбрать собственные параметры")
+    col1, col2, col3 = st.beta_columns(3)
+    with col1:
+        count_activities = st.slider('Активность в Moodle', max_value=1000, min_value=1)
+        count_meetings = st.slider('Кличество встреч в Microsoft Teams', max_value=140, min_value=1)
+        time_audio_minutes = st.slider('Кличество минут аудио сообщений в Microsoft Teams', max_value=10000, min_value=1)
+        time_video_minutes = st.slider('Кличество минут видео сообщений в Microsoft Teams', max_value=4000, min_value=1)
+        share_screen_minutes = st.slider('Кличество минут "поделиться экраном" в Microsoft Teams', max_value=2000, min_value=1)
+    with col2:
+        st.markdown("Пол")
+        sex_f = st.checkbox('Ж')
+        sex_m = st.checkbox('М')
+        country = st.selectbox('Страна', 'Россиия', 'Не россиия')
+        school = st.selectbox('Тип учебного учреждения, который закончил студент', 'Школа', 'Вуз', 'Лицей', 'Гимназия',
+                     'Колледж','Техникум', 'Прочее')
+    with col3:
+        publication = st.checkbox('Имеются публикации')
+        conference = st.checkbox('Участвовал в конференциях')
+        studactiv = st.checkbox('Учавтвовал в студенческих активностях')
+
+    predict = st.button("Предсказать")
+    arr = []
+    arr.append(count_activities)
+    arr.append(count_meetings)
+    arr.append(time_audio_minutes)
+    arr.append(time_video_minutes)
+    arr.append(sex_f)
+    arr.append(sex_m)
+    arr.append(country)
+    arr.append(school)
+    arr.append(publication)
+    arr.append(conference)
+    arr.append(studactiv)
+
+    if predict:
+        st.markdown("Студент с показателями: ", arr)
+        st.markdown("Является успешным")
