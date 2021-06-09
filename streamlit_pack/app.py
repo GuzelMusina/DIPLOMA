@@ -1,143 +1,43 @@
 import time
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import time
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-
 import base64
+from python_pack.predictor.NN import NN
 
 plt.style.use('fivethirtyeight')
-# Split the data into training and testing set
+
 from sklearn.model_selection import train_test_split
 
-# for interactive visualizations
+
 from plotly.offline import init_notebook_mode
 import plotly.graph_objs as go
-import sklearn.metrics as metrics
+
+import python_pack.helpers.Reader as Reader
+import python_pack.found_criterior.methods_for_criterior.FoundCriterior as foundCriterior
+import python_pack.found_criterior.methods_for_criterior.FeautureSelector as featureSelector
+
 init_notebook_mode(connected=True)
-
-
-# from python_pack.predictor.Predictor import Predictors
-
-# import python_pack.found_criterior.methods_for_criterior.FoundCriterior as foundCriterior
-# from python_pack.changers.main_changers import MainChangers
-class Reader(object):
-
-    def readCSV(self, path):
-        dataset = pd.read_csv(path)
-        return dataset
-
-    def readCSVWithSeparator(self, path):
-        dataset = pd.read_csv(path, sep=';')
-        return dataset
-
 
 reader = Reader()
 
-def NN(X_train, X_test, y_train, y_test):
-
-    INPUT = 9
-    # importing the libraries
-    from keras.models import Sequential
-    from keras.layers import Dense
-
-    # create ANN model
-    model = Sequential()
-
-    # Defining the Input layer and FIRST hidden layer, both are same!
-    model.add(Dense(units=36, input_dim=INPUT, kernel_initializer='normal', activation='linear'))
-
-    # Defining the Second layer of the model
-    # after the first layer we don't have to specify input_dim as keras configure it automatically
-    model.add(Dense(units=72, kernel_initializer='normal', activation='linear'))
-    model.add(Dense(units=72, kernel_initializer='normal', activation='linear'))
-        # The output neuron is a single fully connected node
-    # Since we will be predicting a single number
-    model.add(Dense(1, kernel_initializer='normal'))
-
-    # Compile the network :
-    model.compile(loss='mean_absolute_error', optimizer='RMSProp', metrics=['mean_absolute_error'])
-    model.summary()
-
-    # Compiling the model
-    model.compile(loss='mean_absolute_error', optimizer='RMSProp')
-
-    # Fitting the ANN to the Training set
-    model.fit(X_train, y_train, batch_size=20, epochs=50)
-
-    predict = model.predict(X_test)
-    predict = abs(predict.ravel())
-    expect = y_test.ravel()
-    for i in range(len(predict)):
-        predict[i] = int(round(predict[i]))
-    expect = y_test.ravel()
-
-    mae = metrics.mean_absolute_error(expect, predict)
-    mse = metrics.mean_squared_error(expect, predict)
-    rmse = np.sqrt(mse)  # or mse**(0.5)
-    r2 = metrics.r2_score(expect, predict)
-
-    print("Results of sklearn.metrics:")
-    print("MAE:", mae)
-    print("MSE:", mse)
-    print("RMSE:", rmse)
-    print("R-Squared:", r2)
-
-    st.write(metrics.classification_report(expect, predict))
-    st.write(metrics.confusion_matrix(expect, predict))
-
-    # return accuracy_score(expect, predict)
-# def highlight_max(x):
-#     return ['background-color: yellow' if v == x.max() else ''
-#                 for v in x]
-#
-# df = pd.DataFrame(np.random.randn(5, 2))
-# df.style.apply(highlight_max)
-
-# def highlight_max(s):
-#     '''
-#     highlight the maximum in a Series yellow.
-#     '''
-#     is_max = s == s.max()
-#     return ['background-color: yellow' if v else '' for v in is_max]
-
-# def color_negative_red(val):
-#     """
-#     Takes a scalar and returns a string with
-#     the css property `'color: red'` for negative
-#     strings, black otherwise.
-#     """
-#     color = 'red' if val < 0 else 'black'
-#     return 'color: %s' % color
-
 def highlight_classes(x):
-    # if x<56:
-    #     color='red'
-    # elif x>=56 and x<71:
-    #     color='yellow'
-    # else:
-    #     color='green'
-    # return color
     return ['background-color: yellow' if v == x.max() else '' for v in x]
 
 
 menu = st.sidebar.markdown("# Меню")
 select_event_add_and_refactor_and_clustering = st.sidebar.selectbox('Шаг 1',
-                                                                    ['', 'Загрузить, обработать, кластеризовать данные'])
+                                                                    ['',
+                                                                     'Загрузить, обработать, кластеризовать данные'])
 
 select_event_visualize_data = 0
 if select_event_add_and_refactor_and_clustering == 'Загрузить, обработать, кластеризовать данные':
     Text1 = "Пожалуйста загрузите файлы из электронного университета КФУ \n с названиями  *'Student.csv'*, *'Marks.csv'*, \n" \
             "из Microsoft Teams *'MicrosoftTeamsActivity.csv'* \n" \
-            "из Moodle *'MoodleLogs.csv', *'MoodleStudents.csv'*"
+            "из Moodle *'MoodleLogs.csv', 'MoodleStudents.csv'*"
     st.markdown(Text1)
 
     file_names = []
@@ -179,8 +79,6 @@ if select_event_add_and_refactor_and_clustering == 'Загрузить, обра
         elif select_event_add_and_refactor_and_clustering == "MoodleStudents.csv":
             st.text(dataset_students_moodle.head())
 
-
-
         if st.button("Обработать данные"):
             df = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
             st.dataframe(df.style.apply(highlight_classes, subset=['BALLSTOTAL']))
@@ -205,7 +103,7 @@ if select_event_visualize_data == 'Матрица корреляции':
 
 elif select_event_visualize_data == 'Зависимость между тремя признаками':
     options = st.multiselect('Посмотреть зависимость между признаками', df.columns, help="Выберите три признака")
-    if len(options)!=3:
+    if len(options) != 3:
         st.markdown("Пожалуйста выберите три признака")
     else:
         st.write('You selected:', options)
@@ -246,25 +144,19 @@ elif select_event_visualize_data == 'Диапазон принимающих з�
     st.pyplot(plt)
 
 select_event_success_criterior = st.sidebar.selectbox('Шаг 2',
-                                                       ['', 'Определить критерии успешности'])
-if select_event_success_criterior=='Определить критерии успешности':
-    # foundcriterior()
-    # major_features = ['COUNT_ACTIVITIES', 'SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
-    #                   'TIME_AUDIO_MINUTES', 'COUNT_METTINGS', 'MS_MESSAGES']
+                                                      ['', 'Определить критерии успешности'])
+if select_event_success_criterior == 'Определить критерии успешности':
+
     with st.spinner('Подождите немного...'):
         time.sleep(5)
+    foundCriterior
     st.success('Готово!')
     st.markdown("### Самые важные признаки: ")
-    st.markdown("1. COUNT_ACTIVITIES")
-    st.markdown("2. SHARE_SCREEN_MINUTES")
-    st.markdown("3. TIME_VIDEO_MINUTES")
-    st.markdown("4. TIME_AUDIO_MINUTES")
-    st.markdown("5. COUNT_METTINGS")
-    st.markdown("6. TYPEOFSCHOOL")
+    featureSelector.identify_zero_importance()
 
 select_event_success_criterior = st.sidebar.selectbox('Шаг 3',
-                                                       ['', 'Прогнозирвование успешности'])
-if select_event_success_criterior=='Прогнозирвование успешности':
+                                                      ['', 'Прогнозирвование успешности'])
+if select_event_success_criterior == 'Прогнозирвование успешности':
 
     TargetVariable = ['SUCCESS_METRICS_NUMBERS']
     Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS', 'SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
@@ -277,17 +169,16 @@ if select_event_success_criterior=='Прогнозирвование успеш�
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
     ACC_NN = NN(X_train, X_test, y_train, y_test)
 
-# df_now = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
+    # df_now = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
     df_orig = pd.read_csv('data/Final Wave/Final.csv')
     df_orig.drop(df_orig[df_orig.BALLSTOTAL == -1].index, inplace=True)
 
-    df_orig.drop(df_orig[df_orig['COUNT_ACTIVITIES']>1000].index, inplace=True)
-    df_orig.drop(df_orig[df_orig['COUNT_METTINGS']>140].index, inplace=True)
-    df_orig.drop(df_orig[df_orig['TIME_AUDIO_MINUTES']>10000].index, inplace=True)
-    df_orig.drop(df_orig[df_orig['TIME_VIDEO_MINUTES']>4000].index, inplace=True)
-    df_orig.drop(df_orig[df_orig['SHARE_SCREEN_MINUTES']>2000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['COUNT_ACTIVITIES'] > 1000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['COUNT_METTINGS'] > 140].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['TIME_AUDIO_MINUTES'] > 10000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['TIME_VIDEO_MINUTES'] > 4000].index, inplace=True)
+    df_orig.drop(df_orig[df_orig['SHARE_SCREEN_MINUTES'] > 2000].index, inplace=True)
     df_orig.sort_index(inplace=True)
-
 
     id = st.text_input("Введите id студента: ", help='Посмотреть id вы можете загрузив файл "SPISOK.csv"')
     temp_file = pd.DataFrame(df_orig.loc[:, 'FIO'])
@@ -296,44 +187,51 @@ if select_event_success_criterior=='Прогнозирвование успеш�
     href = f'<a href="data:file/csv;base64,{b64}">Скачать файл SPISOK.csv</a>'
     st.markdown(href, unsafe_allow_html=True)
 
-    if id!='':
-        st.write(df_orig.loc[int(id),:])
-        st.write(df.loc[int(id),'SUCCESS_METRICS_WORDS'])
+    if id != '':
+        st.write(df_orig.loc[int(id), :])
+        st.write(df.loc[int(id), 'SUCCESS_METRICS_WORDS'])
 
-    st.markdown("Вы также можете выбрать собственные параметры")
-    col1, col2, col3 = st.beta_columns(3)
-    with col1:
-        count_activities = st.slider('Активность в Moodle', max_value=1000, min_value=1)
-        count_meetings = st.slider('Кличество встреч в Microsoft Teams', max_value=140, min_value=1)
-        time_audio_minutes = st.slider('Кличество минут аудио сообщений в Microsoft Teams', max_value=10000, min_value=1)
-        time_video_minutes = st.slider('Кличество минут видео сообщений в Microsoft Teams', max_value=4000, min_value=1)
-        share_screen_minutes = st.slider('Кличество минут "поделиться экраном" в Microsoft Teams', max_value=2000, min_value=1)
-    with col2:
-        st.markdown("Пол")
-        sex_f = st.checkbox('Ж')
-        sex_m = st.checkbox('М')
-        country = st.selectbox('Страна', 'Россиия', 'Не россиия')
-        school = st.selectbox('Тип учебного учреждения, который закончил студент', 'Школа', 'Вуз', 'Лицей', 'Гимназия',
-                     'Колледж','Техникум', 'Прочее')
-    with col3:
-        publication = st.checkbox('Имеются публикации')
-        conference = st.checkbox('Участвовал в конференциях')
-        studactiv = st.checkbox('Учавтвовал в студенческих активностях')
+st.markdown("Вы также можете выбрать собственные параметры")
+col1, col2, col3 = st.beta_columns(3)
+with col1:
+    count_activities = st.slider('Активность в Moodle', max_value=1000, min_value=1)
+    count_meetings = st.slider('Кличество встреч в Microsoft Teams', max_value=140, min_value=1)
+    time_audio_minutes = st.slider('Кличество минут аудио сообщений в Microsoft Teams', max_value=10000, min_value=1)
+    time_video_minutes = st.slider('Кличество минут видео сообщений в Microsoft Teams', max_value=4000, min_value=1)
+    share_screen_minutes = st.slider('Кличество минут "поделиться экраном" в Microsoft Teams', max_value=2000,
+                                     min_value=1)
+with col2:
+    st.markdown("Пол")
+    sex_f = st.checkbox('Ж')
+    sex_m = st.checkbox('М')
+    country = st.selectbox('Страна', ['Россиия', 'Не россиия'])
+    school = st.selectbox('Тип учебного учреждения, который закончил студент', ['Школа', 'Вуз', 'Лицей', 'Гимназия',
+                                                                                'Колледж', 'Техникум', 'Прочее'])
+with col3:
+    publication = st.checkbox('Имеются публикации')
+    conference = st.checkbox('Участвовал в конференциях')
+    studactiv = st.checkbox('Участвовал в студенческих активностях')
 
-    predict = st.button("Предсказать")
-    arr = []
-    arr.append(count_activities)
-    arr.append(count_meetings)
-    arr.append(time_audio_minutes)
-    arr.append(time_video_minutes)
-    arr.append(sex_f)
-    arr.append(sex_m)
-    arr.append(country)
-    arr.append(school)
-    arr.append(publication)
-    arr.append(conference)
-    arr.append(studactiv)
+predict = st.button("Предсказать")
+arr = []
+arr.append(count_activities)
+arr.append(count_meetings)
+arr.append(time_audio_minutes)
+arr.append(time_video_minutes)
+arr.append(sex_f)
+arr.append(sex_m)
+arr.append(country)
+arr.append(school)
+arr.append(publication)
+arr.append(conference)
+arr.append(studactiv)
 
-    if predict:
-        st.markdown("Студент с показателями: ", arr)
-        st.markdown("Является успешным")
+success_value = ACC_NN.predict(arr)
+
+if predict:
+    if success_value == 0:
+        st.error("Студент не успешный")
+    elif success_value == 1:
+        st.success("Студент близок к успешному")
+    elif success_value == 2:
+        st.success("Студент успешный")

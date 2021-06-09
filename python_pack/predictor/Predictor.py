@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 if __name__ == '__main__':
     st.write("HIII")
-    df = pd.read_csv('../found_criterior/New_data.csv')
+    df = pd.read_csv('../../data/New_data.csv')
     TargetVariable = ['SUCCESS_METRICS_NUMBERS']
     Predictors = ['COUNT_ACTIVITIES', 'COUNT_METTINGS','SHARE_SCREEN_MINUTES', 'TIME_VIDEO_MINUTES',
             'TIME_AUDIO_MINUTES', 'MS_MESSAGES','TET_A_TET_CALLS', 'TYPEOFSCHOOL',
