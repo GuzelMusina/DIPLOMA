@@ -5,7 +5,6 @@ import seaborn as sns
 
 plt.style.use('fivethirtyeight')
 
-# for interactive visualizations
 import plotly.offline as py
 from plotly.offline import init_notebook_mode, iplot
 import plotly.graph_objs as go

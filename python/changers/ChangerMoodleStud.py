@@ -1,9 +1,11 @@
 import pandas as pd
+
+# класс для обработки данных (студентов) из мудл
 class ChangerMoodleStud(object):
     def __init__(self, df):
         self.df = df
 
-    # union NAME FAMILIA  into one string FI
+    # объединение NAME FAMILIA  в один признак FI
     def addFI(self):
         fio_arr = []
         for j in range(0, len(self.df)):
@@ -11,13 +13,16 @@ class ChangerMoodleStud(object):
             fio_arr.append(st)
         self.df.insert(1, 'FI', fio_arr, True)
 
+    # удаление признаков
     def dropColumns(self):
         self.df.drop(['NAME', 'FAMILIA', 'Unnamed: 3'], axis='columns', inplace=True)
 
+    # сортировка
     def sortData(self):
         sorted_data = self.df.sort_values(by='FI')
         return sorted_data
 
+    # формирование словаря из FIO и активности
     def analyzeData(self, df):
         count_total = df['COUNT_ACTIVITIES'][0]
         arr_balls_total = [count_total]
@@ -42,6 +47,5 @@ class ChangerMoodleStud(object):
 
         diction = {'FI': arr_fio, 'COUNT_ACTIVITIES': arr_balls_total}
         print(diction)
-        data = pd.DataFrame(diction)
-        # data.to_csv('..\data\MARKS_FINAL.csv', index=False)
+
         return diction

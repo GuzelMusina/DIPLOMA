@@ -1,14 +1,14 @@
 from numpy import math
 import pandas as pd
 
-
+# класс для обработки данных студентов
 class ChangerStudents(object):
 
     def __init__(self, df):
         self.df = df
 
     def changeBirthplace(self):
-        # заменяем значени по месту рождения
+        # замена значений по месту рождения
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'BIRTHPLACE'] == 'РОССИЙСКАЯ ФЕДЕРАЦИЯ':
                 self.df.loc[i, 'BIRTHPLACE'] = 0
@@ -51,7 +51,7 @@ class ChangerStudents(object):
         print("BIRTHPLACE", self.df['BIRTHPLACE'])
 
     def changeIsMedale(self):
-        #заменяем наличие медали медали
+        #замена наличия медали медали
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'MEDALE'] == 'Нет':
                 self.df.loc[i, 'MEDALE']=0
@@ -63,7 +63,7 @@ class ChangerStudents(object):
                 self.df.loc[i, 'MEDALE']=1
 
     def changeInstitute(self):
-        #заменяем по институту
+        #замена по институту
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'INSTITUTEID'] == 9483:
                 self.df.loc[i, 'INSTITUTEID']=0
@@ -77,13 +77,13 @@ class ChangerStudents(object):
                 self.df.loc[i, 'INSTITUTEID']=4
 
     def changeKindtraining(self):
-        #заменяем по KINDTRAINING
+        #замена по KINDTRAINING
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'KINDTRAINING'] == 49:
                 self.df.loc[i, 'KINDTRAINING']=4
 
     def changeTypeOfTraining(self):
-        #заменяем по TYPETRAINIG
+        #замена по TYPETRAINIG
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'TYPETRAINING'] == 1.0:
                 self.df.loc[i, 'TYPETRAINING']=1
@@ -99,7 +99,7 @@ class ChangerStudents(object):
                 self.df.loc[i, 'TYPETRAINING']=0
 
     def changeQualification(self):
-        #заменяем по QUALIFICATIONTYPE
+        #замена по QUALIFICATIONTYPE
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'QUALIFICATIONTYPE'] == 1.0:
                 self.df.loc[i, 'QUALIFICATIONTYPE']=1
@@ -110,7 +110,7 @@ class ChangerStudents(object):
             elif math.isnan(self.df.loc[i, 'QUALIFICATIONTYPE']):
                 self.df.loc[i, 'QUALIFICATIONTYPE']=0
     def changeCategoryId(self):
-        #заменяем по CATEGORYID
+        #замена по CATEGORYID
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'CATEGORYID'] == 1.0:
                 self.df.loc[i, 'CATEGORYID']=1
@@ -122,7 +122,7 @@ class ChangerStudents(object):
                 self.df.loc[i, 'CATEGORYID']=0
 
     def changeCreativeActive(self):
-        #заменяем по CREATICEACTIVE
+        #замена по CREATICEACTIVE
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'CREATICEACTIVE'] == 1.0:
                 self.df.loc[i, 'CREATICEACTIVE']=1
@@ -134,28 +134,15 @@ class ChangerStudents(object):
                 self.df.loc[i, 'CREATICEACTIVE']=0
 
     def changeOlimpiade(self):
-        #заменяем по OLIMPIADE
+        #замена по OLIMPIADE
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'OLIMPIADE'] == 1.0:
                 self.df.loc[i, 'OLIMPIADE']=1
             elif math.isnan(self.df.loc[i, 'OLIMPIADE']):
                 self.df.loc[i, 'OLIMPIADE']=0
 
-    # change type of school
-    # 0 - Школа (school), пусто (empty)
-    # 1 - Вуз (university)
-    # 2 - Лицей (lyceum)
-    # 3 - Гимназия (gymnasium)
-    # 4 - Колледж (college)
-    # 5 - Техникум (technical college,)
-    # 6 - прочее (other)
-    # 7 - школа-интернат (boarding school)
-    # 8 - Гимназия-интернат (boarding gymnasium)
-    # 9 - Училище (college)
-    # 10 - Лицей-интернат (boarding lyceum)
-    # 11 - АО Ямало-Ненецкий (AO Yamalo-Nenezkii)
     def changeSchool(self):
-        #заменяем значени по школе
+        #замена значений по школе
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'TYPEOFSCHOOL'] == 'Школа':
                 self.df.loc[i, 'TYPEOFSCHOOL']=0
@@ -184,16 +171,15 @@ class ChangerStudents(object):
             else:
                 self.df.loc[i, 'TYPEOFSCHOOL']=0
 
-    # change study type
     def changeStudyType(self):
-        #заменяем по STUDTYPE_ID
+        #замена по STUDTYPE_ID
         for i in range(0, len(self.df)):
             if self.df.loc[i, 'STUDTYPE_ID'] == 1.0:
                 self.df.loc[i, 'STUDTYPE_ID']=1
             elif math.isnan(self.df.loc[i, 'STUDTYPE_ID']):
                 self.df.loc[i, 'STUDTYPE_ID']=0
 
-    # drop columns
+    # удаление признаков
     def dropColumns(self):
         self.df.drop(['NAME', 'FAMILIA', 'OTCHESTVO', 'BIRTHDATE', 'RESIDENCEPLACE', 'VKURL',
                                'FACEBOOK', 'INSTAURL', 'EMAIL', 'EMAILKPFU', 'FOTO', 'PLACEOFGRADUATION',
@@ -201,7 +187,7 @@ class ChangerStudents(object):
                                'PLACEOFGRADUATION', 'YEAROFGRADUATION','REASONFORLEAVING', 'DATEADMISION',
                                'STUDSTATUS', 'GROUPID','CITIZENSHIP_COUNTRY_ID', 'CITIZENSHIP_ID', 'SPECIALLITYID','SPECIALISATIONID', 'STUDY_PLAN_ID'], axis='columns', inplace=True)
 
-    #union NAME FAMILIA and OTCHESTVO into one string FIO
+    #объединение трех признаков NAME FAMILIA and OTCHESTVO в один FIO
     def addFIO(self):
         fio_arr = []
         for j in range(0, len(self.df)):
@@ -210,7 +196,7 @@ class ChangerStudents(object):
             fio_arr.append(st)
         self.df.insert(1, 'FIO', fio_arr, True)
 
-    #union NAME FAMILIA
+    #объединение NAME FAMILIA
     def addFI(self):
         fio_arr = []
         for j in range(0, len(self.df)):
@@ -218,7 +204,7 @@ class ChangerStudents(object):
             fio_arr.append(st)
         self.df.insert(1, 'FI', fio_arr, True)
 
-    # convert columns from float to integer
+    # конвертирование значения признаков из float в integer
     def toNumeric(self):
         self.df["TYPETRAINING"] = pd.to_numeric(self.df["TYPETRAINING"], downcast='integer')
         self.df["QUALIFICATIONTYPE"] = pd.to_numeric(self.df["QUALIFICATIONTYPE"], downcast='integer')
@@ -226,10 +212,3 @@ class ChangerStudents(object):
         self.df["CREATICEACTIVE"] = pd.to_numeric(self.df["CREATICEACTIVE"], downcast='integer')
         self.df["STUDTYPE_ID"] = pd.to_numeric(self.df["STUDTYPE_ID"], downcast='integer')
         self.df["OLIMPIADE"] = pd.to_numeric(self.df["OLIMPIADE"], downcast='integer')
-
-    # save to csv
-    def saveAs(self):
-        print("BIRTHPLACE", self.df['BIRTHPLACE'])
-        self.df.to_csv(r'..\data\Students_new.csv')
-
-

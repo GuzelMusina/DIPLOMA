@@ -1,15 +1,15 @@
 import pandas as pd
 
-from python_pack.changers.ChangerStudents import ChangerStudents
-from python_pack.changers.ChangerMarks import ChangerMarks
-from python_pack.changers.ChangeMSTeams import ChangeMSTeams
-from python_pack.changers.ChangeMoodle import ChangeMoodle
-from python_pack.changers.ChangerMoodleStud import ChangerMoodleStud
-from python_pack.found_criterior.Refactor import Refactor
+from python.changers.ChangerStudents import ChangerStudents
+from python.changers.ChangerMarks import ChangerMarks
+from python.changers.ChangeMSTeams import ChangeMSTeams
+from python.changers.ChangeMoodle import ChangeMoodle
+from python.changers.ChangerMoodleStud import ChangerMoodleStud
+from python.found_criterior.Refactor import Refactor
 
-from python_pack.helpers.Merger import Merger
-from python_pack.helpers.Saver import Saver
-from streamlit.Reader import Reader
+from python.helpers.Merger import Merger
+from python.helpers.Saver import Saver
+from python.helpers.Reader import Reader
 
 saver = Saver()
 reader = Reader()
@@ -180,49 +180,49 @@ class MainChangers(object):
 # проверка уникальных значений в столбце
 # dataset_students.NAME_COLUMN.unique()
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
 
-    # dataset_students_eor = reader.readCSV('../data/First Wave/Students.csv')
-    # refactorStudentsCSV(dataset_students_eor)
+    dataset_students_eor = reader.readCSV('../data/First Wave/Students.csv')
+    refactorStudentsCSV(dataset_students_eor)
 
-    # dataset_marks_eor=reader.readCSV('../../data/First Wave/Marks.csv')
-    # refactorMarksCSV(dataset_marks_eor)
+    dataset_marks_eor=reader.readCSV('../../data/First Wave/Marks.csv')
+    refactorMarksCSV(dataset_marks_eor)
 
-    # dataset_msteams = reader.readCSV('../data/First Wave/MicrosoftTeamsActivity.csv')
-    # refactorMSTeamsCSV(dataset_msteams)
+    dataset_msteams = reader.readCSV('../data/First Wave/MicrosoftTeamsActivity.csv')
+    refactorMSTeamsCSV(dataset_msteams)
 
-    # dataset_marks_refact = pd.read_csv('../../data/Middle Wave/Marks_FINAL.csv')
-    # dataset_students_refact = pd.read_csv('../../data/Middle Wave/Students_new.csv')
-    # dataset_students_refact["STUDENTID"] = dataset_students_refact["STUDENTID"].apply(pd.to_numeric, errors='ignore')
-    # dataset_marks_refact["BALLSTOTAL"] = pd.to_numeric(dataset_marks_refact["BALLSTOTAL"], downcast='integer')
-    # mergeStudentAndMarks(dataset_students_refact, dataset_marks_refact, 'STUDENTID')
+    dataset_marks_refact = pd.read_csv('../../data/Middle Wave/Marks_FINAL.csv')
+    dataset_students_refact = pd.read_csv('../../data/Middle Wave/Students_new.csv')
+    dataset_students_refact["STUDENTID"] = dataset_students_refact["STUDENTID"].apply(pd.to_numeric, errors='ignore')
+    dataset_marks_refact["BALLSTOTAL"] = pd.to_numeric(dataset_marks_refact["BALLSTOTAL"], downcast='integer')
+    mergeStudentAndMarks(dataset_students_refact, dataset_marks_refact, 'STUDENTID')
 
-    # dataset_msteams = pd.read_csv('../../data/Middle Wave/Refactor_MSTeams_new.csv')
-    # dataset_student_and_marks=pd.read_csv('../../data/Middle Wave/StudAndMarksMerge.csv')
-    # mergeMSTeamsAndData(dataset_student_and_marks, dataset_msteams, 'FIO')
+    dataset_msteams = pd.read_csv('../../data/Middle Wave/Refactor_MSTeams_new.csv')
+    dataset_student_and_marks=pd.read_csv('../../data/Middle Wave/StudAndMarksMerge.csv')
+    mergeMSTeamsAndData(dataset_student_and_marks, dataset_msteams, 'FIO')
 
-    # dataset_moodle_logs_rare = pd.read_csv('..\data\First Wave\Logs.csv', sep=';')
-    # dataset_moodle_logs_rare.rename(columns=({'Действие': 'movements', 'Дата': 'date', 'Дата и время': 'date_and_time'}), inplace=True)
-    # renamed_df = dataset_moodle_logs_rare.to_csv("..\data\First Wave\MoodleLogs.csv", index=None)
+    dataset_moodle_logs_rare = pd.read_csv('..\data\First Wave\Logs.csv', sep=';')
+    dataset_moodle_logs_rare.rename(columns=({'Действие': 'movements', 'Дата': 'date', 'Дата и время': 'date_and_time'}), inplace=True)
+    renamed_df = dataset_moodle_logs_rare.to_csv("..\data\First Wave\MoodleLogs.csv", index=None)
 
-    # dataset_logs_moodle = reader.readCSV('../data/Fist Wave/MoodleLogs.csv')
-    # refactorMoodle(dataset_logs_moodle)
+    dataset_logs_moodle = reader.readCSV('../data/Fist Wave/MoodleLogs.csv')
+    refactorMoodle(dataset_logs_moodle)
 
-    # dataset_students_moodle = reader.readCSVWithSeparator('../data/First Wave/MoodleStudents.csv')
-    # refactorStudentsMoodle(dataset_students_moodle)
+    dataset_students_moodle = reader.readCSVWithSeparator('../data/First Wave/MoodleStudents.csv')
+    refactorStudentsMoodle(dataset_students_moodle)
 
-    # data_for_merge_moodle_logs = reader.readCSV('../data/Final Wave/Moodle_logs.csv')
-    # data_for_merge_moodle_students = reader.readCSV('../data/Middle Wave/Student_moodle.csv')
-    #
-    # mergeMoodleLogsAndStudents(data_for_merge_moodle_logs, data_for_merge_moodle_students, 'USERID')
+    data_for_merge_moodle_logs = reader.readCSV('../data/Final Wave/Moodle_logs.csv')
+    data_for_merge_moodle_students = reader.readCSV('../data/Middle Wave/Student_moodle.csv')
 
-    # dataset_final_moodle = reader.readCSV('../data/Final Wave/FinalMoodle.csv')
-    # refactorFinalMoodle(dataset_final_moodle)
+    mergeMoodleLogsAndStudents(data_for_merge_moodle_logs, data_for_merge_moodle_students, 'USERID')
 
-    # dataset_final_moodle = reader.readCSV('../../data/Final Wave/MoodleFinalFinal.csv')
-    # dataset_final_msteams_eor = reader.readCSV('../../data/Final Wave/StudMarksMSteams.csv')
-    #
-    # mergeMoodleTeamsOnlineUni(dataset_final_moodle,dataset_final_msteams_eor, 'FI')
+    dataset_final_moodle = reader.readCSV('../data/Final Wave/FinalMoodle.csv')
+    refactorFinalMoodle(dataset_final_moodle)
+
+    dataset_final_moodle = reader.readCSV('../../data/Final Wave/MoodleFinalFinal.csv')
+    dataset_final_msteams_eor = reader.readCSV('../../data/Final Wave/StudMarksMSteams.csv')
+
+    mergeMoodleTeamsOnlineUni(dataset_final_moodle,dataset_final_msteams_eor, 'FI')
 
 
 

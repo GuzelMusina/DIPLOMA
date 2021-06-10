@@ -2,27 +2,23 @@ import pandas as pd
 from numpy import math
 
 
-# Data mining marks.csv file
+# класс для обработки данных из сайта дистанционного оразования кфу
 class ChangerMarks(object):
     def __init__(self, df):
         self.df = df
-    # # drop column hours and passdate
+
+    # удаление признаков
     def dropColumns(self):
         self.df.drop(['HOURS', 'PASSDATE', 'SEMESTR', 'DISCIPLINEID', 'DISCIPLINETYPE', 'SOURCETYPE',
                       'BALLSSEMESTER', 'BALLSPASS', 'MARK'],
                      axis='columns', inplace=True)
 
-    # convert columns from float to integer
-    # def toNumeric(self):
-    #     self.df["BALLSTOTAL"] = pd.to_numeric(self.df["BALLSTOTAL"], downcast='integer')
-    #     for i in range(len(self.df)):
-    #         if math.isnan(self.df.loc[i, 'BALLSTOTAL']):
-    #             self.df.loc[i, 'BALLSTOTAL'] = 0
-
+    # сортировака по Studentid
     def sortByStudentID(self):
         sorted_data = self.df.sort_values(by='STUDENTID')
         return sorted_data
 
+    # трансформирование из категориальных признаков в числовые
     def refactorBalls(self):
         arr = []
         for i in range(len(self.df)):
@@ -83,6 +79,7 @@ class ChangerMarks(object):
         print(self.df.tail())
         # return df
 
+    # метод формирует словарь из id студента и его среднего балла
     def analyzeMarks(self, df):
         count_total = df['BALLSTOTAL'][0]
         arr_balls_total = [count_total]
@@ -112,6 +109,5 @@ class ChangerMarks(object):
 
         diction = {'STUDENTID': arr_studentid, 'BALLSTOTAL': arr_balls_total}
         print(diction)
-        data = pd.DataFrame(diction)
-        # data.to_csv('..\data\MARKS_FINAL.csv', index=False)
+
         return diction

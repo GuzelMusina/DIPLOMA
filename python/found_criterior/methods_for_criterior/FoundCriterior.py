@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', None)
 import math
 import statistics
-from python_pack.found_criterior.methods_for_criterior.FeautureSelector import FeatureSelector
+from python.found_criterior.methods_for_criterior.FeautureSelector import FeatureSelector
 
 df = pd.read_csv('Data_with_class.csv')
 df_class0 = df[df['CLASS'] == 0]

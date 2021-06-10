@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 import streamlit as st
 import base64
-from python_pack.predictor.NN import NN
+from python.predictor.NN import NN
 
 plt.style.use('fivethirtyeight')
 
@@ -16,9 +16,9 @@ from sklearn.model_selection import train_test_split
 from plotly.offline import init_notebook_mode
 import plotly.graph_objs as go
 
-import python_pack.helpers.Reader as Reader
-import python_pack.found_criterior.methods_for_criterior.FoundCriterior as foundCriterior
-import python_pack.found_criterior.methods_for_criterior.FeautureSelector as featureSelector
+import python.helpers.Reader as Reader
+import python.found_criterior.methods_for_criterior.FoundCriterior as foundCriterior
+import python.found_criterior.methods_for_criterior.FeautureSelector as featureSelector
 
 init_notebook_mode(connected=True)
 
@@ -80,12 +80,12 @@ if select_event_add_and_refactor_and_clustering == 'Загрузить, обра
             st.text(dataset_students_moodle.head())
 
         if st.button("Обработать данные"):
-            df = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
+            df = pd.read_csv('python/found_criterior/Data_with_class.csv')
             st.dataframe(df.style.apply(highlight_classes, subset=['BALLSTOTAL']))
 
         if st.button("Кластеризоать"):
             select_event_add_and_refactor_and_clustering = "Кластризовать данные"
-            df = pd.read_csv('python_pack/found_criterior/New_data.csv')
+            df = pd.read_csv('python/found_criterior/New_data.csv')
             st.markdown("Даные кластеризованы по методу T-SNE")
             st.markdown("### В меню вы можете выбрать пункт из списка 'Посмотреть данные' для того,"
                         "чтобы подробнее ознакомиться с данными")
@@ -94,7 +94,7 @@ if select_event_add_and_refactor_and_clustering == 'Загрузить, обра
                                                        ['', 'Матрица корреляции', 'Зависимость между тремя признаками',
                                                         'Диапазон принимающих значений'])
 
-df = pd.read_csv('python_pack/found_criterior/New_data.csv')
+df = pd.read_csv('python/found_criterior/New_data.csv')
 if select_event_visualize_data == 'Матрица корреляции':
     plt.rcParams['figure.figsize'] = (40, 20)
     sns.heatmap(df.corr(), cmap='PuBu', annot=True)
@@ -169,7 +169,7 @@ if select_event_success_criterior == 'Прогнозирвование успе�
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
     ACC_NN = NN(X_train, X_test, y_train, y_test)
 
-    # df_now = pd.read_csv('python_pack/found_criterior/Data_with_class.csv')
+    # df_now = pd.read_csv('python/found_criterior/Data_with_class.csv')
     df_orig = pd.read_csv('data/Final Wave/Final.csv')
     df_orig.drop(df_orig[df_orig.BALLSTOTAL == -1].index, inplace=True)
 
