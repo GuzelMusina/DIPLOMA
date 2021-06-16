@@ -1,0 +1,8 @@
+freeglut3-dev
+libgtk2.0-dev
+streamlit==0.79.0
+numpy==1.19.2
+joblib==0.17.0
+scikit-learn==0.23.2
+SVM
+Predictor
